@@ -1,6 +1,8 @@
 import sqlite3
 import tkinter
 import tkinter.ttk
+import tkinter as tk
+import tkinter.messagebox
 
 # By Team Blue
 
@@ -31,7 +33,9 @@ def main():  # Creates database and containes first steps of the GUI interface
                    (7, 'Ikora', 'Rey', 20, 'PA', 'Reading', 'Stargazing'),
                    (8, 'Isaac', 'Nelson', 16, 'MD', 'Music', 'Exercise'),
                    (9, 'Alex', 'Balken', 18, 'WY', 'Welding', 'Wood Carving'),
-                   (10, 'David', 'Conway', 22, 'AZ', 'Reading', 'Gaming'),]
+                   (10, 'David', 'Conway', 22, 'AZ', 'Reading', 'Gaming'), ]
+    curs.executemany('INSERT OR REPLACE INTO StudentDatabase VALUES (?, ?, ?, ?, ?, ?, ?)', people_info)
+
     Info = tkinter.Label(TopFrame,
                          text="Student Database. Please select Input to input more data, \n Read to read existing data, or Close to save and exit the program.")
     InputButton = tkinter.Button(TopFrame, text="Input", command=Insert)
@@ -54,14 +58,29 @@ def main():  # Creates database and containes first steps of the GUI interface
     conn.close()
 
 
-def Request():  # Gives all the data in the database
-    curs.execute('''Select * FROM StudentDatabase''')
-    List = curs.fetchall()
-    if List == []:
-        info.set("Database is Empty!")
-    else:
-        info.set(List)
-    OutLabel.pack()
+def Request():  # Show all data inside SQL table
+    tkinter = tk.Tk()
+    tkinter.geometry("660x250")
+    r_set = conn.execute('''SELECT * from StudentDatabase LIMIT 0,10''');
+    e = tk.Entry(tkinter, width=15, fg='black')
+
+    student_fields = ('Student ID', "First Name", "Last Name", 'Age', "State", "Hobby One", "Hobby Two")
+    s = 0
+    for i in range(7):
+        e = tk.Entry(tkinter, width=15, fg='black')
+        e.grid(row=0, column=i)
+        e.insert(tk.END, student_fields[s])
+
+        s += 1
+
+    r = 1
+    for student in r_set:
+        for c in range(len(student)):
+            e = tk.Entry(tkinter, width=15, fg='black')
+            e.grid(row=r + 1, column=c)
+            e.insert(tk.END, student[c])
+
+        r = r + 1
 
 
 def Insert():  # Hub for changing student information
@@ -104,22 +123,19 @@ def UpdateData():
         window = tkinter.Tk()
         window.title("Data Entry Form")
         curs.execute('''Select * FROM StudentDatabase''')
-        List = curs.fetchall()
-        if List == []:
-            info.set("Database is Empty!")
-        else:
-            info.set(List)
-            IDText = tkinter.Label(BottomFrame, text="Please enter the appropriate Student ID")
-            StudentInput = tkinter.Entry(BottomFrame)
 
-            def Give():
-                InfoChange()
+        IDText = tkinter.Label(BottomFrame, text="Please enter the appropriate Student ID")
+        StudentInput = tkinter.Entry(BottomFrame)
 
-            EnterButton = tkinter.Button(BottomFrame, text="Enter", command=Give)
-            OutLabel.pack()
-            IDText.pack()
-            StudentInput.pack()
-            EnterButton.pack()
+        def Give():
+            InfoChange()
+
+        EnterButton = tkinter.Button(BottomFrame, text="Enter", command=Give)
+        OutLabel.pack()
+        IDText.pack()
+        StudentInput.pack()
+        EnterButton.pack()
+
         def InfoChange():
             StudentID = StudentInput.get()
             frame = tkinter.Frame(window)
@@ -172,11 +188,10 @@ def UpdateData():
 
                 conn = sqlite3.connect('StudentDatabase.db')
 
-                student_info = (1, firstname, lastname, "", "TEXT2", "TEXT3", "TEXT4")
-
                 curs.execute('UPDATE StudentDatabase SET first_name = ?, last_name=?, age=?, state=? '
                              'WHERE student_id=?',
                              (firstname, lastname, state, age, StudentID))
+
                 conn.commit()
 
             # Buttons
@@ -194,16 +209,73 @@ def Change():
 
 
 def NewStudent():
-    pass
+    global UpdateStudentClicked
+    if UpdateStudentClicked == False:
+        window = tkinter.Tk()
+        window.title("Data Entry Form")
+
+        frame = tkinter.Frame(window)
+        frame.pack()
+
+        # Saving User Info
+        info_frame = tkinter.LabelFrame(frame, text="Add Student Information")
+        info_frame.grid(row=0, column=0, padx=15, pady=20)
+
+        first_name_label = tkinter.Label(info_frame, text="First Name")
+        first_name_label.grid(row=0, column=0)
+
+        last_name_label = tkinter.Label(info_frame, text="Last Name")
+        last_name_label.grid(row=0, column=1)
+
+        # Entry's
+        first_name_entry = tkinter.Entry(info_frame)
+        last_name_entry = tkinter.Entry(info_frame)
+        first_name_entry.grid(row=1, column=0)
+        last_name_entry.grid(row=1, column=1)
+
+        # Age Number Box
+        age_label = tkinter.Label(info_frame, text="Age")
+        age_spinbox = tkinter.Spinbox(info_frame, from_=18, to=110)
+        age_label.grid(row=2, column=0)
+        age_spinbox.grid(row=3, column=0)
+
+        # State Information labels
+        state_label = tkinter.Label(info_frame, text="State")
+        state_combobox = tkinter.ttk.Combobox(info_frame,
+                                              values=['AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DC', 'DE', 'FL', 'GA',
+                                                      'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA', 'MD', 'ME',
+                                                      'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM',
+                                                      'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX',
+                                                      'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY'])
+
+        state_label.grid(row=2, column=1)
+        state_combobox.grid(row=3, column=1)
+
+        def enter_data():
+            firstname = first_name_entry.get()
+            lastname = last_name_entry.get()
+
+            state = state_combobox.get()
+            age = age_spinbox.get()
+
+            conn = sqlite3.connect('StudentDatabase.db')
+
+            student_info = (11, 'Mason', 'Baloun', 18, 'MN', 'Art', 'Running')
+            curs.execute('INSERT INTO StudentDatabase VALUES (?, ?, ?, ?, ?, ?, ?)', student_info)
+
+            conn.commit()
+
+        # Buttons
+        UpdateStudentClicked = True
+        button = tkinter.Button(frame, text="Enter data", command=enter_data)
+        button.grid(row=3, column=0, sticky="news", padx=20, pady=10)
+        window.mainloop()
+
+        Change()
 
 
 def DeleteStudent():
     curs.execute('''Select * FROM StudentDatabase''')
-    List = curs.fetchall()
-    if List == []:
-        info.set("Database is Empty!")
-    else:
-        info.set(List)
     OutLabel.pack()
 
     def Grab():
@@ -217,6 +289,7 @@ def DeleteStudent():
 
         def FinalDeleteStudent():
             curs.execute('''DELETE FROM StudentDatabase WHERE student_id == ?''', StudentId)
+            tkinter.messagebox.showinfo('Response', f'Deleted StudentID:{StudentId} ')
 
         YesButton = tkinter.Button(BottomFrame, text="Yes", command=FinalDeleteStudent)
 
@@ -235,6 +308,7 @@ def DeleteStudent():
 def Reset():
     mainwindow.destroy()
     main()
+
 
 if __name__ == '__main__':
     main()
