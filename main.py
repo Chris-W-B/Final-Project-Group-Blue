@@ -26,7 +26,7 @@ def main():  # Creates database and containes first steps of the GUI interface
     # This is the actual database, you guys can just change the ###### to whatever you want
     people_info = [(1, 'Mason', 'Baloun', 18, 'MN', 'Art', 'Running'),
                    (2, 'William', 'Brando', 16, 'MN', 'Gaming', 'Building Models'),
-                   (3, 'Christian', 'Berry', 18, 'MN', 'Art', 'Running'),
+                   (3, 'Christian', 'Berry', 18, 'MN', 'Reading', 'Writing'),
                    (4, 'Joe', 'Mama', 18, 'MN', 'Art', 'Running'),
                    (5, 'Yuuji', 'Itadori', 19, 'NY', 'Watching Anime', 'Hanging Out With Friends'),
                    (6, 'Jay', 'Dipersia', 21, 'IL', 'Playing Murder Mystery', 'Art'),
@@ -61,7 +61,7 @@ def main():  # Creates database and containes first steps of the GUI interface
 def Request():  # Show all data inside SQL table
     tkinter = tk.Tk()
     tkinter.geometry("660x250")
-    r_set = conn.execute('''SELECT * from StudentDatabase''')
+    r_set = conn.execute('''SELECT * from StudentDatabase LIMIT 0,10''');
     e = tk.Entry(tkinter, width=15, fg='black')
 
     student_fields = ('Student ID', "First Name", "Last Name", 'Age', "State", "Hobby One", "Hobby Two")
@@ -102,7 +102,7 @@ def Insert():  # Hub for changing student information
             NewStudentButton.destroy()
             NewStudent()
 
-        NewStudentButton = tkinter.Button(BottomFrame, text="Create New Student", command=NewStudent)
+        NewStudentButton = tkinter.Button(BottomFrame, text="Create New Student", command=NewStudentSuicide)
 
         def DeleteSuicide():
             DeleteStudentButton.destroy()
@@ -120,8 +120,6 @@ def Insert():  # Hub for changing student information
 def UpdateData():
     global UpdateStudentClicked
     if UpdateStudentClicked == False:
-        window = tkinter.Tk()
-        window.title("Data Entry Form")
         curs.execute('''Select * FROM StudentDatabase''')
 
         IDText = tkinter.Label(BottomFrame, text="Please enter the appropriate Student ID")
@@ -137,6 +135,8 @@ def UpdateData():
         EnterButton.pack()
 
         def InfoChange():
+            window = tkinter.Tk()
+            window.title("Data Entry Form")
             StudentID = StudentInput.get()
             frame = tkinter.Frame(window)
             frame.pack()
@@ -145,6 +145,7 @@ def UpdateData():
             info_frame = tkinter.LabelFrame(frame, text="Add Student Information")
             info_frame.grid(row=0, column=0, padx=15, pady=20)
 
+
             first_name_label = tkinter.Label(info_frame, text="First Name")
             first_name_label.grid(row=0, column=0)
 
@@ -152,7 +153,11 @@ def UpdateData():
             last_name_label.grid(row=0, column=1)
 
             hobby_one_label = tkinter.Label(info_frame, text="Hobby One")
-            hobby_one_label.grid(row=0, column=1)
+            hobby_one_label.grid(row=4, column=0)
+
+            hobby_one_label = tkinter.Label(info_frame, text="Hobby Two")
+            hobby_one_label.grid(row=4, column=1)
+
 
             # Entry's
             first_name_entry = tkinter.Entry(info_frame)
@@ -162,13 +167,20 @@ def UpdateData():
             last_name_entry.grid(row=1, column=1)
 
             hobby_one_entry = tkinter.Entry(info_frame)
-            hobby_one_entry.grid(row=1, column=0)
+            hobby_one_entry.grid(row=5, column=0)
+
+            hobby_two_entry = tkinter.Entry(info_frame)
+            hobby_two_entry.grid(row=5, column=1)
+
 
             # Age Number Box
             age_label = tkinter.Label(info_frame, text="Age")
             age_spinbox = tkinter.Spinbox(info_frame, from_=18, to=110)
             age_label.grid(row=2, column=0)
             age_spinbox.grid(row=3, column=0)
+
+
+
 
             # State Information labels
             state_label = tkinter.Label(info_frame, text="State")
@@ -192,12 +204,14 @@ def UpdateData():
                 state = state_combobox.get()
                 age = age_spinbox.get()
                 hobbyOne = hobby_one_entry.get()
+                hobbyTwo = hobby_two_entry.get()
 
                 conn = sqlite3.connect('StudentDatabase.db')
 
-                curs.execute('UPDATE StudentDatabase SET first_name = ?, last_name=?, age=?, state=? '
+                curs.execute('UPDATE StudentDatabase SET first_name = ?, last_name=?, age=?, state=?, hobby_one=?, '
+                             'hobby_two=? '
                              'WHERE student_id=?',
-                             (firstname, lastname, state, age, StudentID))
+                             (firstname, lastname, age, state, hobbyOne, hobbyTwo, StudentID))
 
                 conn.commit()
 
@@ -208,7 +222,6 @@ def UpdateData():
             window.mainloop()
 
         Change()
-
 
 def Change():
     global UpdateStudentClicked
@@ -246,11 +259,6 @@ def NewStudent():
         age_label.grid(row=2, column=0)
         age_spinbox.grid(row=3, column=0)
 
-        Student_ID_label = tkinter.Label(info_frame, text="Student ID:")
-        Student_ID_spinbox = tkinter.Entry(info_frame)
-        Student_ID_label.grid(row=4, column=0)
-        Student_ID_spinbox.grid(row=5, column=0)
-
         # State Information labels
         state_label = tkinter.Label(info_frame, text="State")
         state_combobox = tkinter.ttk.Combobox(info_frame,
@@ -269,11 +277,10 @@ def NewStudent():
 
             state = state_combobox.get()
             age = age_spinbox.get()
-            Student_ID = Student_ID_spinbox.get()
 
             conn = sqlite3.connect('StudentDatabase.db')
 
-            student_info = (Student_ID, firstname, lastname, age, state, 'Art', 'Running')
+            student_info = (11, firstname, 'Baloun', 18, 'MN', 'Art', 'Running')
             curs.execute('INSERT INTO StudentDatabase VALUES (?, ?, ?, ?, ?, ?, ?)', student_info)
 
             conn.commit()
@@ -288,8 +295,28 @@ def NewStudent():
 
 
 def DeleteStudent():
-    curs.execute('''Select * FROM StudentDatabase''')
-    OutLabel.pack()
+    window = tk.Tk()
+    window.geometry("660x250")
+    r_set = conn.execute('''SELECT * from StudentDatabase LIMIT 0,10''')
+    e = tk.Entry(window, width=15, fg='black')
+
+    student_fields = ('Student ID', "First Name", "Last Name", 'Age', "State", "Hobby One", "Hobby Two")
+    s = 0
+    for i in range(7):
+        e = tk.Entry(window, width=15, fg='black')
+        e.grid(row=0, column=i)
+        e.insert(tk.END, student_fields[s])
+
+        s += 1
+
+    r = 1
+    for student in r_set:
+        for c in range(len(student)):
+            e = tk.Entry(window, width=15, fg='black')
+            e.grid(row=r + 1, column=c)
+            e.insert(tk.END, student[c])
+
+        r = r + 1
 
     def Grab():
         StudentId = StudentIdEnter.get()
