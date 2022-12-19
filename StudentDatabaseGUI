@@ -157,6 +157,9 @@ def UpdateData():
             hobby_one_label = tkinter.Label(info_frame, text="Hobby Two")
             hobby_one_label.grid(row=4, column=1)
 
+            student_id_label = tkinter.Label(info_frame, text="Student ID")
+            student_id_label.grid(row=6, column=0)
+
             # Entry's
             first_name_entry = tkinter.Entry(info_frame)
             first_name_entry.grid(row=1, column=0)
@@ -169,6 +172,9 @@ def UpdateData():
 
             hobby_two_entry = tkinter.Entry(info_frame)
             hobby_two_entry.grid(row=5, column=1)
+            
+            student_id_entry = tkinter.Entry(info_frame)
+            student_id_entry.grid(row=7, column=1)
 
             # Age Number Box
             age_label = tkinter.Label(info_frame, text="Age")
