@@ -120,8 +120,6 @@ def Insert():  # Hub for changing student information
 def UpdateData():
     global UpdateStudentClicked
     if UpdateStudentClicked == False:
-        window = tkinter.Tk()
-        window.title("Data Entry Form")
         curs.execute('''Select * FROM StudentDatabase''')
 
         IDText = tkinter.Label(BottomFrame, text="Please enter the appropriate Student ID")
@@ -137,6 +135,8 @@ def UpdateData():
         EnterButton.pack()
 
         def InfoChange():
+            window = tkinter.Tk()
+            window.title("Data Entry Form")
             StudentID = StudentInput.get()
             frame = tkinter.Frame(window)
             frame.pack()
