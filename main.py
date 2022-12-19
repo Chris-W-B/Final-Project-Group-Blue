@@ -229,7 +229,8 @@ def Change():
 
 
 def NewStudent():
-    global UpdateStudentClicked
+    global UpdateStudentClicked, InsertClicked
+    InsertClicked = False
     if UpdateStudentClicked == False:
         window = tkinter.Tk()
         window.title("Data Entry Form")
