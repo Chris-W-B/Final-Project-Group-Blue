@@ -19,8 +19,8 @@ OutLabel = tkinter.Label(BottomFrame, textvariable=info)
 
 
 def main():  # Creates database and containes first steps of the GUI interface
-    curs.execute('''CREATE TABLE IF NOT EXISTS StudentDatabase(student_id INTEGER PRIMARY KEY NOT NULL, 
-                first_name TEXT NOT NULL,last_name TEXT NOT NULL, age INTEGER NOT NULL, 
+    curs.execute('''CREATE TABLE IF NOT EXISTS StudentDatabase(student_id INTEGER PRIMARY KEY NOT NULL,
+                first_name TEXT NOT NULL,last_name TEXT NOT NULL, age INTEGER NOT NULL,
                 state TEXT NOT NULL, hobby_one TEXT NOT NULL, hobby_two TEXT NOT NULL)''')
 
     # This is the actual database, you guys can just change the ###### to whatever you want
@@ -145,7 +145,6 @@ def UpdateData():
             info_frame = tkinter.LabelFrame(frame, text="Add Student Information")
             info_frame.grid(row=0, column=0, padx=15, pady=20)
 
-
             first_name_label = tkinter.Label(info_frame, text="First Name")
             first_name_label.grid(row=0, column=0)
 
@@ -158,8 +157,8 @@ def UpdateData():
             hobby_one_label = tkinter.Label(info_frame, text="Hobby Two")
             hobby_one_label.grid(row=4, column=1)
 
-
             # Entry's
+
             first_name_entry = tkinter.Entry(info_frame)
             first_name_entry.grid(row=1, column=0)
 
@@ -172,15 +171,11 @@ def UpdateData():
             hobby_two_entry = tkinter.Entry(info_frame)
             hobby_two_entry.grid(row=5, column=1)
 
-
             # Age Number Box
             age_label = tkinter.Label(info_frame, text="Age")
             age_spinbox = tkinter.Spinbox(info_frame, from_=18, to=110)
             age_label.grid(row=2, column=0)
             age_spinbox.grid(row=3, column=0)
-
-
-
 
             # State Information labels
             state_label = tkinter.Label(info_frame, text="State")
@@ -223,6 +218,7 @@ def UpdateData():
 
         Change()
 
+
 def Change():
     global UpdateStudentClicked
     UpdateStudentClicked = False
@@ -255,16 +251,25 @@ def NewStudent():
         hobby_one_label = tkinter.Label(info_frame, text="Hobby Two")
         hobby_one_label.grid(row=4, column=1)
 
+        student_id_label = tkinter.Label(info_frame, text="Student ID")
+        student_id_label.grid(row=6, column=0)
+
         # Entry's
+
         first_name_entry = tkinter.Entry(info_frame)
-        last_name_entry = tkinter.Entry(info_frame)
         first_name_entry.grid(row=1, column=0)
+
+        last_name_entry = tkinter.Entry(info_frame)
         last_name_entry.grid(row=1, column=1)
+
         hobby_one_entry = tkinter.Entry(info_frame)
         hobby_one_entry.grid(row=5, column=0)
 
         hobby_two_entry = tkinter.Entry(info_frame)
         hobby_two_entry.grid(row=5, column=1)
+
+        student_id_entry = tkinter.Entry(info_frame)
+        student_id_entry.grid(row=7, column=0)
 
         # Age Number Box
         age_label = tkinter.Label(info_frame, text="Age")
@@ -287,16 +292,17 @@ def NewStudent():
         def enter_data():
             firstname = first_name_entry.get()
             lastname = last_name_entry.get()
-
             state = state_combobox.get()
             age = age_spinbox.get()
             hobbyOne = hobby_one_entry.get()
             hobbyTwo = hobby_two_entry.get()
+            student_id =  student_id_entry.get()
+
+            new_student_info = (student_id, firstname, lastname, age, state, hobbyOne, hobbyTwo)
 
             conn = sqlite3.connect('StudentDatabase.db')
 
-            student_info = (S, firstname, lastname, age, state, hobbyOne, hobbyTwo)
-            curs.execute('INSERT INTO StudentDatabase VALUES (?, ?, ?, ?, ?, ?, ?)', student_info)
+            curs.execute('INSERT INTO StudentDatabase VALUES (?, ?, ?, ?, ?, ?, ?)', new_student_info)
 
             conn.commit()
 
