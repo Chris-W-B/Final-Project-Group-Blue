@@ -151,11 +151,18 @@ def UpdateData():
             last_name_label = tkinter.Label(info_frame, text="Last Name")
             last_name_label.grid(row=0, column=1)
 
+            hobby_one_label = tkinter.Label(info_frame, text="Hobby One")
+            hobby_one_label.grid(row=0, column=1)
+
             # Entry's
             first_name_entry = tkinter.Entry(info_frame)
-            last_name_entry = tkinter.Entry(info_frame)
             first_name_entry.grid(row=1, column=0)
+
+            last_name_entry = tkinter.Entry(info_frame)
             last_name_entry.grid(row=1, column=1)
+
+            hobby_one_entry = tkinter.Entry(info_frame)
+            hobby_one_entry.grid(row=1, column=0)
 
             # Age Number Box
             age_label = tkinter.Label(info_frame, text="Age")
@@ -179,12 +186,12 @@ def UpdateData():
             state_label.grid(row=2, column=1)
             state_combobox.grid(row=3, column=1)
 
-            def enter_data():
+            def enter_updated_info():
                 firstname = first_name_entry.get()
                 lastname = last_name_entry.get()
-
                 state = state_combobox.get()
                 age = age_spinbox.get()
+                hobbyOne = hobby_one_entry.get()
 
                 conn = sqlite3.connect('StudentDatabase.db')
 
@@ -196,7 +203,7 @@ def UpdateData():
 
             # Buttons
             UpdateStudentClicked = True
-            button = tkinter.Button(frame, text="Enter data", command=enter_data)
+            button = tkinter.Button(frame, text="Enter data", command=enter_updated_info)
             button.grid(row=3, column=0, sticky="news", padx=20, pady=10)
             window.mainloop()
 
@@ -260,7 +267,7 @@ def NewStudent():
 
             conn = sqlite3.connect('StudentDatabase.db')
 
-            student_info = (11, 'Mason', 'Baloun', 18, 'MN', 'Art', 'Running')
+            student_info = (11, firstname, 'Baloun', 18, 'MN', 'Art', 'Running')
             curs.execute('INSERT INTO StudentDatabase VALUES (?, ?, ?, ?, ?, ?, ?)', student_info)
 
             conn.commit()
