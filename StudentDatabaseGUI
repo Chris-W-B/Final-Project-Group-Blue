@@ -61,7 +61,7 @@ def main():  # Creates database and containes first steps of the GUI interface
 def Request():  # Show all data inside SQL table
     tkinter = tk.Tk()
     tkinter.geometry("660x250")
-    r_set = conn.execute('''SELECT * from StudentDatabase LIMIT 0,10''');
+    r_set = conn.execute('''SELECT * from StudentDatabase''');
     e = tk.Entry(tkinter, width=15, fg='black')
 
     student_fields = ('Student ID', "First Name", "Last Name", 'Age', "State", "Hobby One", "Hobby Two")
