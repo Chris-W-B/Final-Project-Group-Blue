@@ -26,7 +26,7 @@ def main():  # Creates database and containes first steps of the GUI interface
     # This is the actual database, you guys can just change the ###### to whatever you want
     people_info = [(1, 'Mason', 'Baloun', 18, 'MN', 'Art', 'Running'),
                    (2, 'William', 'Brando', 16, 'MN', 'Gaming', 'Building Models'),
-                   (3, 'Christian', 'Berry', 18, 'MN', 'Art', 'Running'),
+                   (3, 'Christian', 'Berry', 18, 'MN', 'Reading', 'Writing'),
                    (4, 'Joe', 'Mama', 18, 'MN', 'Art', 'Running'),
                    (5, 'Yuuji', 'Itadori', 19, 'NY', 'Watching Anime', 'Hanging Out With Friends'),
                    (6, 'Jay', 'Dipersia', 21, 'IL', 'Playing Murder Mystery', 'Art'),
