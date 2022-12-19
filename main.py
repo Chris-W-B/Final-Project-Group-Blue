@@ -295,7 +295,7 @@ def NewStudent():
 
             conn = sqlite3.connect('StudentDatabase.db')
 
-            student_info = (11, firstname, lastname, age, state, hobbyOne, hobbyTwo)
+            student_info = (S, firstname, lastname, age, state, hobbyOne, hobbyTwo)
             curs.execute('INSERT INTO StudentDatabase VALUES (?, ?, ?, ?, ?, ?, ?)', student_info)
 
             conn.commit()
