@@ -295,8 +295,28 @@ def NewStudent():
 
 
 def DeleteStudent():
-    curs.execute('''Select * FROM StudentDatabase''')
-    OutLabel.pack()
+    window = tk.Tk()
+    window.geometry("660x250")
+    r_set = conn.execute('''SELECT * from StudentDatabase LIMIT 0,10''')
+    e = tk.Entry(window, width=15, fg='black')
+
+    student_fields = ('Student ID', "First Name", "Last Name", 'Age', "State", "Hobby One", "Hobby Two")
+    s = 0
+    for i in range(7):
+        e = tk.Entry(window, width=15, fg='black')
+        e.grid(row=0, column=i)
+        e.insert(tk.END, student_fields[s])
+
+        s += 1
+
+    r = 1
+    for student in r_set:
+        for c in range(len(student)):
+            e = tk.Entry(window, width=15, fg='black')
+            e.grid(row=r + 1, column=c)
+            e.insert(tk.END, student[c])
+
+        r = r + 1
 
     def Grab():
         StudentId = StudentIdEnter.get()
