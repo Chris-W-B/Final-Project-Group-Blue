@@ -145,6 +145,7 @@ def UpdateData():
             info_frame = tkinter.LabelFrame(frame, text="Add Student Information")
             info_frame.grid(row=0, column=0, padx=15, pady=20)
 
+
             first_name_label = tkinter.Label(info_frame, text="First Name")
             first_name_label.grid(row=0, column=0)
 
@@ -152,7 +153,11 @@ def UpdateData():
             last_name_label.grid(row=0, column=1)
 
             hobby_one_label = tkinter.Label(info_frame, text="Hobby One")
-            hobby_one_label.grid(row=0, column=1)
+            hobby_one_label.grid(row=4, column=0)
+
+            hobby_one_label = tkinter.Label(info_frame, text="Hobby Two")
+            hobby_one_label.grid(row=4, column=1)
+
 
             # Entry's
             first_name_entry = tkinter.Entry(info_frame)
@@ -162,13 +167,20 @@ def UpdateData():
             last_name_entry.grid(row=1, column=1)
 
             hobby_one_entry = tkinter.Entry(info_frame)
-            hobby_one_entry.grid(row=1, column=0)
+            hobby_one_entry.grid(row=5, column=0)
+
+            hobby_two_entry = tkinter.Entry(info_frame)
+            hobby_two_entry.grid(row=5, column=1)
+
 
             # Age Number Box
             age_label = tkinter.Label(info_frame, text="Age")
             age_spinbox = tkinter.Spinbox(info_frame, from_=18, to=110)
             age_label.grid(row=2, column=0)
             age_spinbox.grid(row=3, column=0)
+
+
+
 
             # State Information labels
             state_label = tkinter.Label(info_frame, text="State")
@@ -192,12 +204,14 @@ def UpdateData():
                 state = state_combobox.get()
                 age = age_spinbox.get()
                 hobbyOne = hobby_one_entry.get()
+                hobbyTwo = hobby_two_entry.get()
 
                 conn = sqlite3.connect('StudentDatabase.db')
 
-                curs.execute('UPDATE StudentDatabase SET first_name = ?, last_name=?, age=?, state=? '
+                curs.execute('UPDATE StudentDatabase SET first_name = ?, last_name=?, age=?, state=?, hobby_one=?, '
+                             'hobby_two=? '
                              'WHERE student_id=?',
-                             (firstname, lastname, state, age, StudentID))
+                             (firstname, lastname, age, state, hobbyOne, hobbyTwo, StudentID))
 
                 conn.commit()
 
@@ -208,7 +222,6 @@ def UpdateData():
             window.mainloop()
 
         Change()
-
 
 def Change():
     global UpdateStudentClicked
