@@ -61,7 +61,7 @@ def main():  # Creates database and containes first steps of the GUI interface
 def Request():  # Show all data inside SQL table
     tkinter = tk.Tk()
     tkinter.geometry("660x250")
-    r_set = conn.execute('''SELECT * from StudentDatabase LIMIT 0,10''');
+    r_set = conn.execute('''SELECT * from StudentDatabase''')
     e = tk.Entry(tkinter, width=15, fg='black')
 
     student_fields = ('Student ID', "First Name", "Last Name", 'Age', "State", "Hobby One", "Hobby Two")
@@ -246,6 +246,11 @@ def NewStudent():
         age_label.grid(row=2, column=0)
         age_spinbox.grid(row=3, column=0)
 
+        Student_ID_label = tkinter.Label(info_frame, text="Student ID:")
+        Student_ID_spinbox = tkinter.Entry(info_frame)
+        Student_ID_label.grid(row=4, column=0)
+        Student_ID_spinbox.grid(row=5, column=0)
+
         # State Information labels
         state_label = tkinter.Label(info_frame, text="State")
         state_combobox = tkinter.ttk.Combobox(info_frame,
@@ -264,10 +269,11 @@ def NewStudent():
 
             state = state_combobox.get()
             age = age_spinbox.get()
+            Student_ID = Student_ID_spinbox.get()
 
             conn = sqlite3.connect('StudentDatabase.db')
 
-            student_info = (11, firstname, 'Baloun', 18, 'MN', 'Art', 'Running')
+            student_info = (Student_ID, firstname, lastname, age, state, 'Art', 'Running')
             curs.execute('INSERT INTO StudentDatabase VALUES (?, ?, ?, ?, ?, ?, ?)', student_info)
 
             conn.commit()
