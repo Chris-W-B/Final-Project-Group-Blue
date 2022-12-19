@@ -61,7 +61,7 @@ def main():  # Creates database and containes first steps of the GUI interface
 def Request():  # Show all data inside SQL table
     tkinter = tk.Tk()
     tkinter.geometry("660x250")
-    r_set = conn.execute('''SELECT * from StudentDatabase LIMIT 0,10''')
+    r_set = conn.execute('''SELECT * from StudentDatabase''');
     e = tk.Entry(tkinter, width=15, fg='black')
 
     student_fields = ('Student ID', "First Name", "Last Name", 'Age', "State", "Hobby One", "Hobby Two")
@@ -229,7 +229,8 @@ def Change():
 
 
 def NewStudent():
-    global UpdateStudentClicked, InsertClicked
+    global UpdateStudentClicked
+    global InsertClicked
     if UpdateStudentClicked == False:
         InsertClicked = False
         window = tkinter.Tk()
@@ -281,7 +282,7 @@ def NewStudent():
 
             conn = sqlite3.connect('StudentDatabase.db')
 
-            student_info = (11, firstname, 'Baloun', 18, 'MN', 'Art', 'Running')
+            student_info = (11, firstname, 'Baloun', age, state, 'Art', 'Running')
             curs.execute('INSERT INTO StudentDatabase VALUES (?, ?, ?, ?, ?, ?, ?)', student_info)
 
             conn.commit()
@@ -298,7 +299,7 @@ def NewStudent():
 def DeleteStudent():
     window = tk.Tk()
     window.geometry("660x250")
-    r_set = conn.execute('''SELECT * from StudentDatabase LIMIT 0,10''')
+    r_set = conn.execute('''SELECT * from StudentDatabase''')
     e = tk.Entry(window, width=15, fg='black')
 
     student_fields = ('Student ID', "First Name", "Last Name", 'Age', "State", "Hobby One", "Hobby Two")
