@@ -145,7 +145,6 @@ def UpdateData():
             info_frame = tkinter.LabelFrame(frame, text="Add Student Information")
             info_frame.grid(row=0, column=0, padx=15, pady=20)
 
-
             first_name_label = tkinter.Label(info_frame, text="First Name")
             first_name_label.grid(row=0, column=0)
 
@@ -157,7 +156,6 @@ def UpdateData():
 
             hobby_one_label = tkinter.Label(info_frame, text="Hobby Two")
             hobby_one_label.grid(row=4, column=1)
-
 
             # Entry's
             first_name_entry = tkinter.Entry(info_frame)
@@ -172,15 +170,11 @@ def UpdateData():
             hobby_two_entry = tkinter.Entry(info_frame)
             hobby_two_entry.grid(row=5, column=1)
 
-
             # Age Number Box
             age_label = tkinter.Label(info_frame, text="Age")
             age_spinbox = tkinter.Spinbox(info_frame, from_=18, to=110)
             age_label.grid(row=2, column=0)
             age_spinbox.grid(row=3, column=0)
-
-
-
 
             # State Information labels
             state_label = tkinter.Label(info_frame, text="State")
@@ -222,6 +216,7 @@ def UpdateData():
             window.mainloop()
 
         Change()
+
 
 def Change():
     global UpdateStudentClicked
@@ -287,16 +282,16 @@ def NewStudent():
         def enter_data():
             firstname = first_name_entry.get()
             lastname = last_name_entry.get()
-
             state = state_combobox.get()
             age = age_spinbox.get()
             hobbyOne = hobby_one_entry.get()
             hobbyTwo = hobby_two_entry.get()
 
+            new_student_info = (11, firstname, lastname, age, state, hobbyOne, hobbyTwo)
+
             conn = sqlite3.connect('StudentDatabase.db')
 
-            student_info = (11, firstname, lastname, age, state, hobbyOne, hobbyTwo)
-            curs.execute('INSERT INTO StudentDatabase VALUES (?, ?, ?, ?, ?, ?, ?)', student_info)
+            curs.execute('INSERT INTO StudentDatabase VALUES (?, ?, ?, ?, ?, ?, ?)', new_student_info)
 
             conn.commit()
 
