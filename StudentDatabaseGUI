@@ -299,7 +299,7 @@ def NewStudent():
 def DeleteStudent():
     window = tk.Tk()
     window.geometry("660x250")
-    r_set = conn.execute('''SELECT * from StudentDatabase LIMIT 0,10''')
+    r_set = conn.execute('''SELECT * from StudentDatabase''')
     e = tk.Entry(window, width=15, fg='black')
 
     student_fields = ('Student ID', "First Name", "Last Name", 'Age', "State", "Hobby One", "Hobby Two")
